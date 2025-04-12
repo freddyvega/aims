@@ -13,6 +13,7 @@ dist/
 
 # NestJS
 apps/**/dist/
+apps/frontend/.next/
 
 # Cursor
 .cursor/
