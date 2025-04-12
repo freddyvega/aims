@@ -1,0 +1,7 @@
+{
+  "/aims/registry/page": "app/aims/registry/page.js",
+  "/aims/audit/page": "app/aims/audit/page.js",
+  "/aims/risks/page": "app/aims/risks/page.js",
+  "/aims/compliance/page": "app/aims/compliance/page.js",
+  "/aims/governance/page": "app/aims/governance/page.js"
+}

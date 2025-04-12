@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Mac
+.DS_Store
+
+# Editor junk
+*.log
+.vscode/
+.idea/
+
+# NestJS
+apps/**/dist/
+
+# Cursor
+.cursor/

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: aims
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./apps/backend
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/aims
+    depends_on:
+      - db
+
+  frontend:
+    build: ./apps/frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+
+volumes:
+  pgdata:

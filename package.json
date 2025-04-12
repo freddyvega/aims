@@ -1,0 +1,9 @@
+{
+    "name": "aims-platform",
+    "private": true,
+    "scripts": {
+        "dev": "pnpm --filter @backend/backend dev",
+        "build": "pnpm --filter @backend/backend build",
+        "start": "pnpm --filter @backend/backend start"
+    }
+}
