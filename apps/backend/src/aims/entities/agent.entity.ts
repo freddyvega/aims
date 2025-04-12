@@ -4,11 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-} from "typeorm";
+  ManyToMany,
+} from 'typeorm';
+import { Clause } from './clause.entity';
 
-@Entity("agents")
+@Entity('agents')
 export class Agent {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ length: 255 })
@@ -20,14 +22,17 @@ export class Agent {
   @Column({ length: 255 })
   type: string;
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   capabilities: Record<string, any>;
 
-  @Column({ type: "jsonb", nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   configuration: Record<string, any>;
 
   @Column({ default: true })
   isActive: boolean;
+
+  @ManyToMany(() => Clause, (clause) => clause.agents)
+  clauses: Clause[];
 
   @CreateDateColumn()
   createdAt: Date;

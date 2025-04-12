@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Agent } from "../entities/agent.entity";
-import { CreateAgentDto } from "../dto/create-agent.dto";
-import { UpdateAgentDto } from "../dto/update-agent.dto";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Agent } from '../entities/agent.entity';
+import { CreateAgentDto } from '../dto/create-agent.dto';
+import { UpdateAgentDto } from '../dto/update-agent.dto';
 
 @Injectable()
 export class AgentService {
