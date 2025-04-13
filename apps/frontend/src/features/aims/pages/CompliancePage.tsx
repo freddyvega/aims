@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FaFileAlt, FaCheck, FaExclamationTriangle, FaTimes, FaFilter, FaEdit } from "react-icons/fa";
 import { getClauses, updateClause, Clause, CreateClauseDto, UpdateClauseDto, UI_TO_API_STATUS, API_TO_UI_STATUS } from "../services/aims-api";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "@/libs/toast";
 
 
 // ClauseModal component
@@ -382,37 +382,15 @@ export default function CompliancePage() {
             </table>
           </div>
         </div>
+
+        {/* Modal for editing clauses */}
+        <ClauseModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitClause}
+          clause={currentClause}
+        />
       </div>
-
-      {/* Modal for editing clauses */}
-      <ClauseModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleSubmitClause}
-        clause={currentClause}
-      />
-
-      {/* Toast notifications */}
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#333',
-            color: '#fff',
-          },
-          success: {
-            style: {
-              background: '#22c55e',
-            },
-          },
-          error: {
-            style: {
-              background: '#ef4444',
-            },
-          },
-        }}
-      />
     </>
   );
 } 
