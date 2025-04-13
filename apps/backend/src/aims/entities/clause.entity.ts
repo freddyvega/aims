@@ -11,7 +11,7 @@ export enum ClauseStatus {
 @Entity()
 export class Clause {
   @PrimaryColumn()
-  id: string; // ClauseId: 5.3, 6.1, etc. is primary key here becaues they're unique
+  id: string; // ClauseId: 5.3, 6.1, etc. is primary key here because they're unique
 
   @Column({ type: 'int', default: 999 })
   sortOrder: number;
