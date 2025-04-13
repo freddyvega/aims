@@ -22,6 +22,7 @@ export interface Clause {
   status: 'Met' | 'Partial' | 'Gap' | 'Pending';
   evidenceLink?: string | null;
   sortOrder: number;
+  agents?: Agent[];
 }
 
 export interface CreateClauseDto {

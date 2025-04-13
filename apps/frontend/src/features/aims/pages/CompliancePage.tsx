@@ -324,6 +324,9 @@ export default function CompliancePage() {
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Evidence
                   </th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Linked Agents
+                  </th>
                   <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
@@ -332,7 +335,7 @@ export default function CompliancePage() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredClauses.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
+                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
                       No clauses found matching the selected filter.
                     </td>
                   </tr>
@@ -365,6 +368,22 @@ export default function CompliancePage() {
                           <FaFileAlt className="mr-2" />
                           {clause.evidenceLink || "No Evidence"}
                         </button>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-wrap gap-1">
+                          {clause.agents && clause.agents.length > 0 ? (
+                            clause.agents.map(agent => (
+                              <span 
+                                key={agent.id} 
+                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                              >
+                                {agent.name}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-sm text-gray-400">No agents linked</span>
+                          )}
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button 
