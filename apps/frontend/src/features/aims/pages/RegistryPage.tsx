@@ -1,49 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaRobot, FaEye, FaEdit, FaTimes, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import { FaRobot, FaEye, FaEdit, FaTimes } from "react-icons/fa";
 import { getAgents, createAgent, updateAgent, CreateAgentDto, Agent } from "../services/aims-api";
-
-// Simple Toast component
-interface ToastProps {
-  message: string;
-  type: 'success' | 'error';
-  onClose: () => void;
-}
-
-const Toast = ({ message, type, onClose }: ToastProps) => {
-  useEffect(() => {
-    // Auto dismiss after 5 seconds
-    const timer = setTimeout(() => {
-      onClose();
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [onClose]);
-
-  return (
-    <div className={`fixed top-4 right-4 z-50 flex items-center p-4 rounded-lg shadow-lg ${
-      type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
-    }`}>
-      <div className="flex-shrink-0 mr-3">
-        {type === 'success' ? (
-          <FaCheckCircle className="h-5 w-5 text-green-500" />
-        ) : (
-          <FaExclamationCircle className="h-5 w-5 text-red-500" />
-        )}
-      </div>
-      <div className="flex-1">
-        <p className="text-sm font-medium">{message}</p>
-      </div>
-      <button 
-        onClick={onClose}
-        className="ml-4 text-gray-400 hover:text-gray-500 focus:outline-none"
-      >
-        <FaTimes className="h-4 w-4" />
-      </button>
-    </div>
-  );
-};
+import { toast } from "../../../../libs/toast";
 
 export default function RegistryPage() {
   const [loading, setLoading] = useState(false);
@@ -59,9 +19,6 @@ export default function RegistryPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agents, setAgents] = useState<Agent[]>([]);
   
-  // Toast state
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
   // Dummy agent types for dropdown
   const agentTypes = [
     "Chatbot",
@@ -118,10 +75,7 @@ export default function RegistryPage() {
           )
         );
         
-        setToast({
-          message: `Agent "${result.name}" was successfully updated`,
-          type: 'success'
-        });
+        toast.success(`Agent "${result.name}" was successfully updated`);
       } else {
         // Create new agent
         result = await createAgent(formData);
@@ -129,10 +83,7 @@ export default function RegistryPage() {
         // Refresh the agent list to include the new agent
         await fetchAgents();
         
-        setToast({
-          message: `Agent "${result.name}" was successfully created`,
-          type: 'success'
-        });
+        toast.success(`Agent "${result.name}" was successfully created`);
       }
       
       console.log(isEditMode ? "Updated agent:" : "Created agent:", result);
@@ -145,10 +96,7 @@ export default function RegistryPage() {
       console.error(isEditMode ? "Error updating agent:" : "Error creating agent:", err);
       
       // Show error toast
-      setToast({
-        message: err instanceof Error ? err.message : `Failed to ${isEditMode ? 'update' : 'create'} agent. Please try again.`,
-        type: 'error'
-      });
+      toast.error(err instanceof Error ? err.message : `Failed to ${isEditMode ? 'update' : 'create'} agent. Please try again.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -177,21 +125,8 @@ export default function RegistryPage() {
     setFormData({ name: "", type: "", description: "" });
   };
 
-  const closeToast = () => {
-    setToast(null);
-  };
-
   return (
     <div className="p-6">
-      {/* Toast notification */}
-      {toast && (
-        <Toast 
-          message={toast.message} 
-          type={toast.type} 
-          onClose={closeToast} 
-        />
-      )}
-
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">AI Registry</h1>
