@@ -8,5 +8,8 @@
     },
     "devDependencies": {
         "prettier": "^3.0.0"
+    },
+    "dependencies": {
+        "react-hot-toast": "^2.5.2"
     }
 }

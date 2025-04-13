@@ -15,6 +15,43 @@ export interface CreateAgentDto {
   description: string;
 }
 
+export interface Clause {
+  id: string;
+  title: string;
+  description: string;
+  status: 'Met' | 'Partial' | 'Gap' | 'Pending';
+  evidenceLink?: string | null;
+  sortOrder: number;
+}
+
+export interface CreateClauseDto {
+  id: string;
+  title: string;
+  description: string;
+  status: 'Met' | 'Partial' | 'Gap' | 'Pending';
+  evidenceLink?: string | null;
+}
+
+export interface UpdateClauseDto {
+  status?: 'pending' | 'gap' | 'compliant' | 'non_compliant';
+  evidenceLink?: string | null;
+}
+
+// Status mapping constants
+export const UI_TO_API_STATUS = {
+  'Met': 'compliant',
+  'Partial': 'non_compliant',
+  'Gap': 'gap',
+  'Pending': 'pending'
+};
+
+export const API_TO_UI_STATUS = {
+  'compliant': 'Met',
+  'non_compliant': 'Partial',
+  'gap': 'Gap',
+  'pending': 'Pending'
+};
+
 /**
  * Fetches the list of AI agents from the backend
  */
@@ -30,6 +67,25 @@ export async function getAgents(): Promise<Agent[]> {
   } catch (error) {
     console.error('Error fetching agents:', error);
     throw error;
+  }
+}
+
+/**
+ * Fetches the list of ISO 42001 clauses from the backend
+ */
+export async function getClauses(): Promise<Clause[]> {
+  try {
+    const response = await fetch('http://localhost:3001/api/clauses');
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching clauses:', error);
+    // Return mock data for now
+    return [];
   }
 }
 
@@ -77,6 +133,54 @@ export async function updateAgent(id: number, agent: CreateAgentDto): Promise<Ag
     return await response.json();
   } catch (error) {
     console.error('Error updating agent:', error);
+    throw error;
+  }
+}
+
+/**
+ * Creates a new ISO 42001 clause
+ */
+export async function createClause(clause: CreateClauseDto): Promise<Clause> {
+  try {
+    const response = await fetch('http://localhost:3001/api/clauses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(clause),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating clause:', error);
+    throw error;
+  }
+}
+
+/**
+ * Updates an existing ISO 42001 clause
+ */
+export async function updateClause(id: string, clause: UpdateClauseDto): Promise<Clause> {
+  try {
+    const response = await fetch(`http://localhost:3001/api/clauses/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(clause),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating clause:', error);
     throw error;
   }
 } 

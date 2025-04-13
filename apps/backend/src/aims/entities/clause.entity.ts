@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Column, Entity, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Agent } from './agent.entity';
 
 export enum ClauseStatus {
@@ -16,8 +10,11 @@ export enum ClauseStatus {
 
 @Entity()
 export class Clause {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryColumn()
+  id: string; // ClauseId: 5.3, 6.1, etc. is primary key here becaues they're unique
+
+  @Column({ type: 'int', default: 999 })
+  sortOrder: number;
 
   @Column()
   title: string;
@@ -31,6 +28,9 @@ export class Clause {
     default: ClauseStatus.PENDING,
   })
   status: ClauseStatus;
+
+  @Column({ nullable: true })
+  evidenceLink: string;
 
   @ManyToMany(() => Agent, (agent) => agent.clauses)
   @JoinTable()

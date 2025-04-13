@@ -13,7 +13,11 @@ export class ClauseService {
   ) {}
 
   async findAll(): Promise<Clause[]> {
-    return this.clauseRepository.find();
+    return this.clauseRepository.find({
+      order: {
+        sortOrder: 'ASC',
+      },
+    });
   }
 
   async findOne(id: string): Promise<Clause> {
