@@ -1,5 +1,13 @@
-import { Column, Entity, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
+} from 'typeorm';
 import { Agent } from './agent.entity';
+import { AgentClauseAssessment } from './agent-clause-assessment.entity';
 
 export enum ClauseStatus {
   GAP = 'gap',
@@ -35,6 +43,9 @@ export class Clause {
   @ManyToMany(() => Agent, (agent) => agent.clauses)
   @JoinTable()
   agents: Agent[];
+
+  @OneToMany(() => AgentClauseAssessment, (assessment) => assessment.clause)
+  assessments: AgentClauseAssessment[];
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

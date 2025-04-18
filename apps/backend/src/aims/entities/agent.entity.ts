@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
+  OneToMany,
 } from 'typeorm';
 import { Clause } from './clause.entity';
+import { AgentClauseAssessment } from './agent-clause-assessment.entity';
 
 @Entity('agents')
 export class Agent {
@@ -33,6 +35,11 @@ export class Agent {
 
   @ManyToMany(() => Clause, (clause) => clause.agents)
   clauses: Clause[];
+
+  @OneToMany(() => AgentClauseAssessment, (assessment) => assessment.agent, {
+    cascade: true,
+  })
+  assessments: AgentClauseAssessment[];
 
   @CreateDateColumn()
   createdAt: Date;

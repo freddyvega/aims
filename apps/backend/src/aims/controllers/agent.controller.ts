@@ -10,6 +10,7 @@ import {
 import { AgentService } from '../services/agent.service';
 import { CreateAgentDto } from '../dto/create-agent.dto';
 import { UpdateAgentDto } from '../dto/update-agent.dto';
+import { Agent } from '../entities/agent.entity';
 
 @Controller('agents')
 export class AgentController {
@@ -21,13 +22,15 @@ export class AgentController {
   }
 
   @Get()
-  findAll() {
-    return this.agentService.findAll();
+  async findAll() {
+    const agents = await this.agentService.findAll();
+    return agents.map((agent) => this.transformAgentResponse(agent));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agentService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const agent = await this.agentService.findOne(id);
+    return this.transformAgentResponse(agent);
   }
 
   @Patch(':id')
@@ -38,5 +41,14 @@ export class AgentController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.agentService.remove(id);
+  }
+
+  // Helper method to transform agent response for frontend
+  private transformAgentResponse(agent: Agent) {
+    const { assessments, ...rest } = agent;
+    return {
+      ...rest,
+      scopedAssessments: assessments,
+    };
   }
 }

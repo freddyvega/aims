@@ -18,11 +18,16 @@ export class AgentService {
   }
 
   async findAll(): Promise<Agent[]> {
-    return this.agentRepository.find();
+    return this.agentRepository.find({
+      relations: ['clauses', 'assessments', 'assessments.clause'],
+    });
   }
 
   async findOne(id: string): Promise<Agent> {
-    const agent = await this.agentRepository.findOne({ where: { id } });
+    const agent = await this.agentRepository.findOne({
+      where: { id },
+      relations: ['clauses', 'assessments', 'assessments.clause'],
+    });
     if (!agent) {
       throw new NotFoundException(`Agent with ID ${id} not found`);
     }
