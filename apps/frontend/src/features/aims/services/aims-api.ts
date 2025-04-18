@@ -7,6 +7,8 @@ export interface Agent {
   name: string;
   type: string;
   description: string;
+  clauses?: Clause[];
+  scopedAssessments?: AgentClauseAssessment[];
 }
 
 export interface CreateAgentDto {
@@ -35,6 +37,26 @@ export interface CreateClauseDto {
 
 export interface UpdateClauseDto {
   status?: 'pending' | 'gap' | 'compliant' | 'non_compliant';
+  evidenceLink?: string | null;
+}
+
+export interface AgentClauseAssessment {
+  id: string;
+  agentId: string;
+  clauseId: string;
+  evidenceLink?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  clause?: Clause;
+}
+
+export interface CreateAgentClauseAssessmentDto {
+  agentId: string;
+  clauseId: string;
+  evidenceLink?: string | null;
+}
+
+export interface UpdateAgentClauseAssessmentDto {
   evidenceLink?: string | null;
 }
 
@@ -182,6 +204,73 @@ export async function updateClause(id: string, clause: UpdateClauseDto): Promise
     return await response.json();
   } catch (error) {
     console.error('Error updating clause:', error);
+    throw error;
+  }
+}
+
+/**
+ * Creates a new agent-clause assessment linkage
+ */
+export async function createAgentClauseAssessment(assessment: CreateAgentClauseAssessmentDto): Promise<AgentClauseAssessment> {
+  try {
+    const response = await fetch('http://localhost:3001/api/agent-clause-assessments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(assessment),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating agent-clause assessment:', error);
+    throw error;
+  }
+}
+
+/**
+ * Updates an existing agent-clause assessment
+ */
+export async function updateAgentClauseAssessment(id: string, assessment: UpdateAgentClauseAssessmentDto): Promise<AgentClauseAssessment> {
+  try {
+    const response = await fetch(`http://localhost:3001/api/agent-clause-assessments/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(assessment),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating agent-clause assessment:', error);
+    throw error;
+  }
+}
+
+/**
+ * Deletes an agent-clause assessment
+ */
+export async function deleteAgentClauseAssessment(id: string): Promise<void> {
+  try {
+    const response = await fetch(`http://localhost:3001/api/agent-clause-assessments/${id}`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    
+  } catch (error) {
+    console.error('Error deleting agent-clause assessment:', error);
     throw error;
   }
 } 
